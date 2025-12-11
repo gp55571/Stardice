@@ -1,0 +1,2 @@
+# Stardice
+Strona zarządzająca filmami
