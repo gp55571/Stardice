@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP 2025 - FilmWyszukaj</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+    <div class="main-wrapper">
+
+        <header class="top-header">
+            <div class="logo-container">
+                <div class="logo-icon-placeholder"><a href="index.html">Here goes logo icon</a></div> 
+                <span class="logo-text"><a href="index.html">FilmWyszukaj</a></span>
+            </div>
+
+            
+
+            <div class="search-bar-container">
+                <span class="material-icons search-icon">search</span>
+                <input type="text" id="search-input" class="search-input" placeholder="Znajdź film na wieczór...">
+                <span class="material-icons close-icon">close</span>
+            </div>
+
+            <div class="menu-dots">
+                 <span class="material-icons">more_vert</span>
+            </div>
+        </header>
+
+        <main class="content-area">
+
+            <div class="category-header-block">
+                <h1 class="page-title">Hity Kinowe</h1>
+                <div class="center-underline"></div>
+            </div>
+
+            <div class="movie-list-container">
+
+                <article class="horizontal-card">
+                    <div class="h-card-poster placeholder-poster"></div>
+                    
+                    <div class="h-card-content">
+                        <div class="h-card-top">
+                            <h2 class="movie-title">FILMNAZWA1</h2>
+                            <div class="movie-rating">
+                                <span class="material-icons">star_border</span> 8.9
+                            </div>
+                        </div>
+
+                        <p class="movie-desc">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        </p>
+
+                        <div class="h-card-footer">
+                            <span class="info-tag">gatunek Dramat / Horror 2016</span>
+                            <span class="director-tag">reżyser Jan Jakub</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="horizontal-card">
+                    <div class="h-card-poster placeholder-poster"></div>
+                    <div class="h-card-content">
+                        <div class="h-card-top">
+                            <h2 class="movie-title">FILMNAZWA2</h2>
+                            <div class="movie-rating">
+                                <span class="material-icons">star_border</span> 7.3
+                            </div>
+                        </div>
+
+                        <p class="movie-desc">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        </p>
+
+                        <div class="h-card-footer">
+                            <span class="info-tag">gatunek Dramat / Horror 2016</span>
+                            <span class="director-tag">reżyser Jan Jakub</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="horizontal-card">
+                    <div class="h-card-poster placeholder-poster"></div>
+                    <div class="h-card-content">
+                        <div class="h-card-top">
+                            <h2 class="movie-title">FILMNAZWA3</h2>
+                            <div class="movie-rating">
+                                <span class="material-icons">star_border</span> 6.5
+                            </div>
+                        </div>
+                        <p class="movie-desc">Lorem Ipsum...</p>
+                        <div class="h-card-footer">
+                            <span class="info-tag">gatunek Akcja 2024</span>
+                            <span class="director-tag">reżyser Jan Jakub</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </main>
+    </div>
+
+<script>
+    // Skrypt przekierowujący po naciśnięciu Enter
+    document.getElementById('search-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            const query = this.value;
+            // Przenosimy użytkownika na stronę wyników z wpisanym słowem w adresie URL
+            window.location.href = `wyniki.html?query=${encodeURIComponent(query)}`;
+        }
+    });
+</script>
+<script src="script.js"></script>
+
+
+</body>
+</html>
