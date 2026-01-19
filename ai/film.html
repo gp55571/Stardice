@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szczegóły Filmu - FilmWyszukaj</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="movie-details-page">
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div class="logo-container">
+                <span class="logo-text"><a href="index.html">FilmWyszukaj</a></span>
+            </div>
+            <div class="search-bar-container">
+                <span class="material-icons search-icon">search</span>
+                <input type="text" class="search-input" placeholder="wyszukanie">
+            </div>
+        </header>
+
+        <main class="movie-content">
+            <div class="movie-header-section">
+                <h1 id="movie-title-display" class="large-title">NazwaFilmu</h1>
+                <div class="title-underline"></div>
+            </div>
+
+            <div class="movie-main-grid">
+                <div class="video-placeholder">
+                    <span class="material-icons play-huge">play_arrow</span>
+                    <span class="material-icons heart-icon">favorite_border</span>
+                </div>
+
+                <div class="movie-meta-box">
+                    <div class="meta-row-top">
+                        <h2 id="movie-genre-display">gatunek Dramat / Horror</h2>
+                        <div class="score-badge">
+                            <span id="movie-score-display">8.5</span> <span class="material-icons">star</span>
+                        </div>
+                    </div>
+                    
+                    <p class="movie-full-desc">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                    </p>
+
+                    <div class="availability">
+                        <span>Dostępne w</span>
+                        <div class="platform-icons">
+                            <div class="p-icon"></div><div class="p-icon"></div><div class="p-icon"></div>
+                        </div>
+                    </div>
+
+                    <div class="footer-meta">
+                        <span id="movie-year-display">2016</span>
+                        <span id="movie-director-display">reżyser Jan Jakub</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="actors-section">
+                <h3>Aktorzy</h3>
+                <div class="actors-list">
+                    <div class="actor-card"><div class="actor-img"></div><span>Aktor1</span></div>
+                    <div class="actor-card"><div class="actor-img"></div><span>Aktor2</span></div>
+                    <div class="actor-card"><div class="actor-img"></div><span>Aktor3</span></div>
+                </div>
+            </section>
+
+
+            <section class="comments-section">
+    <div class="comments-header">
+        <h3>O filmie <span id="movie-name-comment">Nazwa Filmu</span></h3>
+        <span class="count-badge">liczba ocen 52 <span class="material-icons">east</span></span>
+    </div>
+
+    <div class="sort-bar">
+        <span>sortuj po</span>
+        <button class="sort-btn active">najnowsze</button>
+        <button class="sort-btn">najlepiej oceniane</button>
+    </div>
+
+    <div class="add-comment-box">
+        <p>Dodaj komentarz</p>
+        <textarea placeholder="Wpisz swoją opinię..."></textarea>
+        <div class="rating-row">
+            <span>Twoja Ocena</span>
+            <div class="stars">
+                <span class="material-icons star-outline">star_outline</span>
+                <span class="material-icons star-outline">star_outline</span>
+                <span class="material-icons star-outline">star_outline</span>
+                <span class="material-icons star-outline">star_outline</span>
+                <span class="material-icons star-outline">star_outline</span>
+                <span class="material-icons star-outline">star_outline</span>
+                <span class="material-icons star-outline">star_outline</span>
+                <span class="material-icons star-outline">star_outline</span>
+                <span class="material-icons star-outline">star_outline</span>
+                <span class="material-icons star-outline">star_outline</span>
+            </div>
+            <button class="publish-btn">Opublikuj</button>
+        </div>
+    </div>
+
+    <div class="comments-list">
+        <article class="user-comment">
+            <div class="comment-header">
+                <span class="username">UserName1</span>
+                <span class="user-rating">8 <span class="material-icons">star</span></span>
+            </div>
+            <p class="comment-text">Super film bardzo mi się podobał!</p>
+            <div class="comment-footer">
+                <span class="material-icons">thumb_up</span> 5
+                <span class="material-icons">thumb_down</span> 2
+                <span class="time-ago">3 miesiące temu</span>
+            </div>
+        </article>
+
+        <article class="user-comment">
+            <div class="comment-header">
+                <span class="username">UserName2</span>
+                <span class="user-rating">6 <span class="material-icons">star</span></span>
+            </div>
+            <p class="comment-text">Okej ale szału nie ma</p>
+            <div class="comment-footer">
+                <span class="material-icons">thumb_up</span> 3
+                <span class="material-icons">thumb_down</span> 2
+                <span class="time-ago">1 rok temu</span>
+            </div>
+        </article>
+    </div>
+</section>
+        </main>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const title = params.get('title');
+        const score = params.get('score');
+
+        if (title) {
+            // Wstawiamy tytuł do nagłówka i zmieniamy tytuł karty w przeglądarce
+            document.getElementById('movie-title-display').innerText = title;
+            document.title = `${title} - FilmWyszukaj`;
+        }
+        
+        if (score) {
+            document.getElementById('movie-score-display').innerText = score;
+        }
+
+        // Możesz tu też dodać losowanie opisu lub gatunku, 
+        // jeśli nie przekazujesz ich w URL, żeby strona nie była pusta.
+
+        // Wewnątrz <script> na stronie film.html:
+        if (title) {
+            document.getElementById('movie-title-display').innerText = title;
+            document.getElementById('movie-name-comment').innerText = title; // To dodaj
+        }
+    });
+</script>
+</body>
+</html>
