@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Panel Admina - Logowanie</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .login-box {
+    background: #333;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    width: 300px;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px -8px;
+    border: none;
+    border-radius: 5px;
+  }
+
+  button {
+    background: #4CAF50;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .error {
+    color: #ff6666;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="login-box">
+  <h2>Panel Admina</h2>
+  <input type="text" id="login" placeholder="Login">
+  <input type="password" id="password" placeholder="Hasło">
+  <button onclick="login()">Zaloguj</button>
+  <p class="error" id="error">Niepoprawny login lub hasło</p>
+</div>
+
+<script>
+  function login() {
+    const login = document.getElementById("login").value;
+    const password = document.getElementById("password").value;
+
+    if (login === "admin" && password === "admin") {
+      window.location.href = "panel.html";
+    } else {
+      document.getElementById("error").style.display = "block";
+    }
+  }
+</script>
+
+</body>
+</html>
