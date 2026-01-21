@@ -90,9 +90,15 @@
             window.location.href = `wyniki.html?query=${encodeURIComponent(query)}`;
         }
     });
+    document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey && e.shiftKey && e.key === "Z") {
+      window.location.href = "admin.html";
+    }
+  });
 </script>
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
