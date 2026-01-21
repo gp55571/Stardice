@@ -1,4 +1,4 @@
-// 1. Wczytanie filmów z JSON
+
 let movies = [];
 
 fetch('filmy.json')
@@ -15,13 +15,11 @@ fetch('filmy.json')
   })
   .catch(err => console.error("Błąd wczytywania JSON:", err));
 
-// 2. Utworzenie kontenera na podpowiedzi
 const searchInput = document.getElementById('search-input');
 const suggestionBox = document.createElement('div');
 suggestionBox.classList.add('autocomplete-suggestions');
 searchInput.parentNode.appendChild(suggestionBox);
 
-// 3. Wyświetlanie podpowiedzi przy wpisywaniu
 searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase().trim();
     suggestionBox.innerHTML = '';
@@ -45,10 +43,9 @@ searchInput.addEventListener('input', () => {
     });
 });
 
-// 4. Zamknięcie sugestii przy kliknięciu poza input
-// 4. Zamknięcie sugestii przy kliknięciu poza input
 document.addEventListener('click', (e) => {
     if (e.target !== searchInput && !suggestionBox.contains(e.target)) {
         suggestionBox.innerHTML = '';
     }
 });
+
