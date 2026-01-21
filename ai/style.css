@@ -638,3 +638,44 @@ a{
 
 
 .time-ago { margin-left: auto; }
+
+/* Kontener sugestii */
+.autocomplete-suggestions {
+    position: absolute;      /* Absolutnie względem inputa */
+    top: 100%;               /* Tuż pod inputem */
+    left: 0;
+    width: 100%;
+    background: #1C1C24;     /* Ciemne tło pasujące do strony */
+    border: 1px solid #333;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 9999;           /* Bardzo wysoki z-index, nad wszystkim */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* Pojedyncza sugestia */
+.autocomplete-suggestion {
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #FFF;
+    font-size: 16px;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* Hover i aktywna sugestia */
+.autocomplete-suggestion:hover,
+.autocomplete-suggestion.active {
+    background: #4CC9F0;     /* Jasnoniebieskie podświetlenie */
+    color: #000;
+}
+
+/* Dodatkowa informacja np. rok po prawej */
+.autocomplete-suggestion span {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+}
