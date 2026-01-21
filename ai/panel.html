@@ -5,19 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel Admina - Filmy</title>
 <style>
-body { font-family: Arial; padding:20px; background:#f4f4f4; }
-h1,h3,h4 { margin:10px 0; }
-input, select, textarea, button { padding:8px; margin:5px 0; width:100%; }
+body { font-family: Arial; background:#f4f4f4; padding:20px; }
+h1,h2,h3,h4 { margin:10px 0; }
+input, select, textarea, button { width:100%; padding:8px; margin:5px 0; box-sizing:border-box; }
 button { cursor:pointer; background:#4CAF50; color:white; border:none; border-radius:5px; }
-.movie { background:#fff; padding:10px; margin:10px 0; border:1px solid #ccc; }
-.multi-select { height:80px; }
+.movie-card { background:#fff; padding:10px; margin:10px 0; border:1px solid #ccc; border-radius:5px; }
+.multi-select { height:100px; }
+.section { margin-bottom:40px; }
 </style>
 </head>
 <body>
 
 <h1>Panel Admina – Filmy</h1>
 
-<h3>Dodaj / Edytuj film</h3>
+<div class="section">
+<h2>Dodaj / Edytuj film</h2>
 
 <input type="hidden" id="editKey">
 <input type="text" id="title" placeholder="Tytuł filmu">
@@ -39,16 +41,196 @@ button { cursor:pointer; background:#4CAF50; color:white; border:none; border-ra
 <select id="platforms" multiple class="multi-select"></select>
 
 <button id="saveBtn">Zapisz</button>
+</div>
 
-<hr>
-
-<h3>Lista filmów</h3>
+<div class="section">
+<h2>Lista filmów</h2>
 <div id="movieList"></div>
+</div>
 
-<button onclick="logout()">Wyloguj</button>
+<script type="module">
+
+function parseDB(dbRaw) {
+    const db = {};
+    dbRaw.objects.forEach(obj => {
+        const name = obj.name;
+        const cols = obj.columns.map(c => c.name);
+        db[name] = obj.rows.map(row => {
+            const item = {};
+            cols.forEach((col, i) => item[col] = row[i]);
+            return item;
+        });
+    });
+    return db;
+}
 
 
-<script type="module" src="script1.js"></script>
+let db = {};
+let movies = [];
+let movieActors = [];
+let movieDirectors = [];
+let movieGenres = [];
+let moviePlatforms = [];
 
+async function loadData() {
+    try {
+        const res = await fetch('filmy.json');
+        const rawDB = await res.json();
+        db = parseDB(rawDB);
+
+        movies = db.movies || [];
+        movieActors = db.movie_actors || [];
+        movieDirectors = db.movie_directors || [];
+        movieGenres = db.movie_genres || [];
+        moviePlatforms = db.movie_platforms || [];
+
+        populateSelects();
+        renderMovies();
+
+    } catch(err) {
+        console.error("Błąd przy ładowaniu danych:", err);
+    }
+}
+
+function populateSelects() {
+    const genresSelect = document.getElementById('genres');
+    (db.genres || []).forEach(g => genresSelect.innerHTML += `<option value="${g.id}">${g.name}</option>`);
+
+    const actorsSelect = document.getElementById('actors');
+    (db.actors || []).forEach(a => actorsSelect.innerHTML += `<option value="${a.id}">${a.name}</option>`);
+
+    const directorsSelect = document.getElementById('directors');
+    (db.directors || []).forEach(d => directorsSelect.innerHTML += `<option value="${d.id}">${d.name}</option>`);
+
+    const platformsSelect = document.getElementById('platforms');
+    (db.platforms || []).forEach(p => platformsSelect.innerHTML += `<option value="${p.id}">${p.name}</option>`);
+}
+
+function renderMovies() {
+    const list = document.getElementById('movieList');
+    list.innerHTML = '';
+
+    if(!movies || movies.length === 0) {
+        list.innerHTML = "<p>Brak filmów</p>";
+        return;
+    }
+
+    movies.forEach(movie => {
+        const genres = movieGenres
+            .filter(mg => mg.movie_id === movie.id)
+            .map(mg => db.genres.find(g => g.id === mg.genre_id)?.name)
+            .join(', ');
+
+        const actors = movieActors
+            .filter(ma => ma.movie_id === movie.id)
+            .map(ma => db.actors.find(a => a.id === ma.actor_id)?.name)
+            .join(', ');
+
+        const directors = movieDirectors
+            .filter(md => md.movie_id === movie.id)
+            .map(md => db.directors.find(d => d.id === md.director_id)?.name)
+            .join(', ');
+
+        const platforms = moviePlatforms
+            .filter(mp => mp.movie_id === movie.id)
+            .map(mp => db.platforms.find(p => p.id === mp.platform_id)?.name)
+            .join(', ');
+
+        const div = document.createElement('div');
+        div.className = 'movie-card';
+        div.innerHTML = `
+            <strong>${movie.title}</strong> (${movie.year})<br>
+            Czas: ${movie.runtime} min | Ocena: ${movie.imdb_rating}<br>
+            ${movie.description_pl || '-'}<br>
+            <strong>Gatunki:</strong> ${genres || '-'}<br>
+            <strong>Aktorzy:</strong> ${actors || '-'}<br>
+            <strong>Reżyserowie:</strong> ${directors || '-'}<br>
+            <strong>Platformy:</strong> ${platforms || '-'}<br>
+            <button onclick="editMovie(${movie.id})">Edytuj</button>
+            <button onclick="deleteMovie(${movie.id})">Usuń</button>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function editMovie(id) {
+    const movie = movies.find(m => m.id === id);
+    if(!movie) return;
+
+    document.getElementById('editKey').value = movie.id;
+    document.getElementById('title').value = movie.title;
+    document.getElementById('year').value = movie.year;
+    document.getElementById('runtime').value = movie.runtime;
+    document.getElementById('imdb').value = movie.imdb_rating;
+    document.getElementById('description').value = movie.description_pl;
+
+    document.getElementById('genres').value = movieGenres.filter(mg=>mg.movie_id===id).map(mg=>mg.genre_id);
+    document.getElementById('actors').value = movieActors.filter(ma=>ma.movie_id===id).map(ma=>ma.actor_id);
+    document.getElementById('directors').value = movieDirectors.filter(md=>md.movie_id===id).map(md=>md.director_id);
+    document.getElementById('platforms').value = moviePlatforms.filter(mp=>mp.movie_id===id).map(mp=>mp.platform_id);
+}
+
+function deleteMovie(id) {
+    if(confirm("Na pewno chcesz usunąć film?")) {
+        movies = movies.filter(m => m.id !== id);
+        movieGenres = movieGenres.filter(mg => mg.movie_id !== id);
+        movieActors = movieActors.filter(ma => ma.movie_id !== id);
+        movieDirectors = movieDirectors.filter(md => md.movie_id !== id);
+        moviePlatforms = moviePlatforms.filter(mp => mp.movie_id !== id);
+        renderMovies();
+    }
+}
+
+
+document.getElementById('saveBtn').addEventListener('click', () => {
+    const id = document.getElementById('editKey').value;
+    const title = document.getElementById('title').value;
+    const year = parseInt(document.getElementById('year').value);
+    const runtime = parseInt(document.getElementById('runtime').value);
+    const imdb_rating = parseFloat(document.getElementById('imdb').value);
+    const description_pl = document.getElementById('description').value;
+
+    const selectedGenres = Array.from(document.getElementById('genres').selectedOptions).map(o=>parseInt(o.value));
+    const selectedActors = Array.from(document.getElementById('actors').selectedOptions).map(o=>parseInt(o.value));
+    const selectedDirectors = Array.from(document.getElementById('directors').selectedOptions).map(o=>parseInt(o.value));
+    const selectedPlatforms = Array.from(document.getElementById('platforms').selectedOptions).map(o=>parseInt(o.value));
+
+    if(id) {
+        const movie = movies.find(m=>m.id==id);
+        Object.assign(movie,{title, year, runtime, imdb_rating, description_pl});
+        movieGenres = movieGenres.filter(mg => mg.movie_id != id).concat(selectedGenres.map(gid=>({movie_id:+id, genre_id:gid})));
+        movieActors = movieActors.filter(ma => ma.movie_id != id).concat(selectedActors.map(aid=>({movie_id:+id, actor_id:aid})));
+        movieDirectors = movieDirectors.filter(md => md.movie_id != id).concat(selectedDirectors.map(did=>({movie_id:+id, director_id:did})));
+        moviePlatforms = moviePlatforms.filter(mp => mp.movie_id != id).concat(selectedPlatforms.map(pid=>({movie_id:+id, platform_id:pid})));
+    } else {
+        const newId = movies.length ? Math.max(...movies.map(m=>m.id)) + 1 : 1;
+        movies.push({id:newId, title, year, runtime, imdb_rating, description_pl});
+        movieGenres = movieGenres.concat(selectedGenres.map(gid=>({movie_id:newId, genre_id:gid})));
+        movieActors = movieActors.concat(selectedActors.map(aid=>({movie_id:newId, actor_id:aid})));
+        movieDirectors = movieDirectors.concat(selectedDirectors.map(did=>({movie_id:newId, director_id:did})));
+        moviePlatforms = moviePlatforms.concat(selectedPlatforms.map(pid=>({movie_id:newId, platform_id:pid})));
+    }
+
+    clearForm();
+    renderMovies();
+});
+
+function clearForm() {
+    document.getElementById('editKey').value = '';
+    document.getElementById('title').value = '';
+    document.getElementById('year').value = '';
+    document.getElementById('runtime').value = '';
+    document.getElementById('imdb').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('genres').value = [];
+    document.getElementById('actors').value = [];
+    document.getElementById('directors').value = [];
+    document.getElementById('platforms').value = [];
+}
+
+
+loadData();
+
+</script>
 </body>
 </html>
