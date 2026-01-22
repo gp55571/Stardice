@@ -36,8 +36,9 @@ searchInput.addEventListener('input', () => {
         div.addEventListener('click', () => {
             searchInput.value = movie.title;
             suggestionBox.innerHTML = '';
-            window.location.href = `wyniki.html?query=${encodeURIComponent(movie.title)}`;
+            window.location.href = `wyniki.html?id=${movie.id}`;
         });
+
 
         suggestionBox.appendChild(div);
     });
